@@ -1,0 +1,12 @@
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: speech2text-backend
+spec:
+  tls:
+    termination: edge
+  to:
+    kind: Service
+    name: speech2text-backend
+    weight: 100
+  wildcardPolicy: None
