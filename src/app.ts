@@ -8,8 +8,10 @@ app.get("/", (request: Request, response: Response) => {
   response.send("Hello world.");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-}).on("error", (error) => {
-  throw new Error(error.message);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+}
+
+export default app;
