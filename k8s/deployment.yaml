@@ -55,9 +55,9 @@ spec:
         terminationMessagePath: /dev/termination-log
         terminationMessagePolicy: File
         imagePullPolicy: IfNotPresent
-      imagePullSecrets: 
+      imagePullSecrets:
       - name: mnonaka-pull-secret
-        securityContext:
-          fsGroup: 1001030000
+      securityContext:
+        fsGroup: 1001030000
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
