@@ -5,9 +5,10 @@ WORKDIR /usr/src/app
 RUN mkdir -p /usr/src/app/dist
 
 COPY package*.json ./
-RUN npm ci && npm run build
+RUN npm ci
 COPY . .
+RUN npm run build
 
 EXPOSE 8000
 
-CMD [ "npm", "start" ]
+CMD [ "node", "dist/server.js" ]
