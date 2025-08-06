@@ -55,7 +55,6 @@ spec:
       imagePullSecrets:
       - name: mnonaka-pull-secret
       securityContext: 
-        runAsUser: 1001030000
         fsGroup: 1001030000
   revisionHistoryLimit: 10
   progressDeadlineSeconds: 600
