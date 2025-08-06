@@ -1,17 +1,14 @@
 import express, { Request, Response } from "express";
-
+import itemRoutes from './routes/routes';
+import { errorHandler } from "./middlewares/errorHandler";
 
 const app = express();
-const PORT = 8000;
+app.use(express.json());
 
-app.get("/", (request: Request, response: Response) => {
-  response.send("Hello world.");
-});
+// Routes
+app.use("/api/v1/", itemRoutes);
 
-if (require.main === module) {
-  app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-  });
-}
+// Global error handler
+app.use(errorHandler);
 
 export default app;
