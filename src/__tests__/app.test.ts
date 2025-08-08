@@ -8,10 +8,3 @@ describe('GET / for healthcheck', () => {
     expect(res.text).toBe("OK");
   })
 })
-
-describe('GET /api/v1/', () => {
-  it('should return a hello message', async () => {
-    const res = await request(app).get('/api/v1/');
-    expect(res.statusCode).toBe(200);
-  })
-})

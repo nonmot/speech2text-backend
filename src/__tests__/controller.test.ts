@@ -1,22 +1,17 @@
 import { Request, Response } from 'express';
-import { getItems } from '../controllers/controllers';
+import { recognizeAudio } from '../controllers/controllers';
 
-describe('Controller', () => {
-  it('should return an empty array when no items exist', () => {
-    const req = {} as Request;
-
-    const jsonMock = jest.fn();
-    const statusMock = jest.fn().mockReturnValue({ json: jsonMock });
-
-    const res = {
-      status: statusMock,
-    } as unknown as Response;
-
+describe('recognizeAudio', () => {
+  it('should return 400 if no file is uploaded', async () => {
+    const req: any = { file: null };
+    const res: any = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn()
+    }
     const next = jest.fn();
-    
-    getItems(req, res, next);
+    await recognizeAudio(req, res, next);
 
-    expect(statusMock).toHaveBeenCalledWith(200);
-    expect(jsonMock).toHaveBeenCalledWith({ message: "Hello world!" });
+    expect(res.status).toHaveBeenCalledWith(400);
+    expect(res.json).toHaveBeenCalledWith({ message: 'No file uploaded.' });
   });
 });

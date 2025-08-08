@@ -21,12 +21,17 @@
   },
   "homepage": "https://github.com/nonmot/speech2text-backend#readme",
   "dependencies": {
-    "express": "^5.1.0"
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "ibm-watson": "^11.0.0",
+    "multer": "^2.0.2"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.19",
     "@types/express": "^5.0.3",
     "@types/jest": "^30.0.0",
     "@types/mocha": "^10.0.10",
+    "@types/multer": "^2.0.0",
     "@types/supertest": "^6.0.3",
     "jest": "^30.0.5",
     "supertest": "^7.1.4",
