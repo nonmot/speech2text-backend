@@ -21,9 +21,9 @@ spec:
       containers:
       - name: speech2text-backend
         image: speech2text-backend
-        # envFrom:
-        #   - secretRef:
-        #       name: wd-secret
+        envFrom:
+          - secretRef:
+              name: speech2text-secret
         ports:
         - name: http
           protocol: TCP
