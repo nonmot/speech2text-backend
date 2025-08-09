@@ -12,6 +12,6 @@ describe('recognizeAudio', () => {
     await recognizeAudio(req, res, next);
 
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.json).toHaveBeenCalledWith({ message: 'No file uploaded.' });
+    expect(res.json).toHaveBeenCalledWith({ error: 'file is required' });
   });
 });
