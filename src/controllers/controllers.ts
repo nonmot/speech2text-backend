@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import speechToText from "../services/speechToText";
 
+import { findKeywordMatches } from "../helper/textMatch";
+
+type Payload = {
+  transcript: string;
+  highlights: any; // TODO
+}
+
 export const recognizeAudio = async (req: Request, res: Response, next: NextFunction) => {
   try {
     const file = req.file;
@@ -17,11 +24,27 @@ export const recognizeAudio = async (req: Request, res: Response, next: NextFunc
       return res.status(415).json({ error: `unsupported content-type: ${file.mimetype}` });
     }
 
+    // const keywords = req.body?.keywords;
+    const keywords: string[] = [];
+    if (Array.isArray(req.body?.keywords)) {
+      req.body?.keywords?.map((kw: any) => keywords.push(kw));
+    } else {
+      if (req.body?.keywords) {
+        keywords.push(req.body?.keywords);
+      }
+    }
+    console.log(`keywords: ${keywords.length}`);
+
     const recognizeParams = {
       audio: file.buffer,
       contentType: file.mimetype,
-      model: model
+      model: model,
+      ...(keywords.length > 0 ? {
+        keywords: keywords,
+        keywordsThreshold: 0.5
+      } : {})
     }
+    console.log(recognizeParams);
 
     console.log("sending")
     const rawResults = await speechToText.recognize(recognizeParams)
@@ -30,7 +53,17 @@ export const recognizeAudio = async (req: Request, res: Response, next: NextFunc
       transcript: alternatives[0].transcript,
     }));
 
-    res.status(200).json({ results });
+    const segments = rawResults?.result?.results ?? [];
+    const transcript = segments
+      .map((r: any) => r?.alternatives[0]?.transcript ?? "")
+      .join("")
+      .trim();
+
+    const highlights = findKeywordMatches(transcript, keywords);
+    console.log(highlights); // DEBUG
+
+    const payload: Payload = { transcript, highlights }
+    res.status(200).json(payload);
   } catch (error) {
     next(error);
   }
