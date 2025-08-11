@@ -11,9 +11,9 @@ on:
   jobs:
     build:
       runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-        - name: Run a one-line script for test
-          run: echo Hello, world!
-        
+      - name: Run a one-line script for test
+        run: echo Hello, world!
+      
