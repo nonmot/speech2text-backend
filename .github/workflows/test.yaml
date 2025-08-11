@@ -7,6 +7,9 @@ on:
     branches: ["main"]
 
   workflow_dispatch:
+env:
+  SPEECH2TEXT_API_KEY: ${{secret.SPEECH2TEXT_API_KEY}}
+  SPEECH2TEXT_SERVICE_URL: ${{secret.SPEECH2TEXT_SERVICE_URL}}
 
 jobs:
   build:
