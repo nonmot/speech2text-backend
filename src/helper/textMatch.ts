@@ -1,3 +1,4 @@
+import type { KeywordHit } from "../types";
 
 function escapeRegExp(s: string): string {
   return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
@@ -8,7 +9,7 @@ export function findKeywordMatches(
   keywords: string[],
   contextLen = 24,
 ) {
-  const hits = [];
+  const hits: KeywordHit[] = [];
   for (const kw of keywords) {
     if (!kw) continue;
     const re = RegExp(escapeRegExp(kw), "g");
