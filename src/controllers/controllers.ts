@@ -2,10 +2,19 @@ import { Request, Response, NextFunction } from "express";
 import speechToText from "../services/speechToText";
 
 import { findKeywordMatches } from "../helper/textMatch";
+import type { KeywordHit } from "../types";
 
 type Payload = {
   transcript: string;
-  highlights: any; // TODO
+  highlights: KeywordHit[];
+}
+
+interface Alternative {
+  transcript?: string;
+}
+
+interface Segment {
+  alternatives: Alternative[];
 }
 
 export const recognizeAudio = async (req: Request, res: Response, next: NextFunction) => {
@@ -27,7 +36,7 @@ export const recognizeAudio = async (req: Request, res: Response, next: NextFunc
     // const keywords = req.body?.keywords;
     const keywords: string[] = [];
     if (Array.isArray(req.body?.keywords)) {
-      req.body?.keywords?.map((kw: any) => keywords.push(kw));
+      req.body?.keywords?.map((kw: string) => keywords.push(kw));
     } else {
       if (req.body?.keywords) {
         keywords.push(req.body?.keywords);
@@ -49,13 +58,9 @@ export const recognizeAudio = async (req: Request, res: Response, next: NextFunc
     console.log("sending")
     const rawResults = await speechToText.recognize(recognizeParams)
 
-    const results = rawResults.result.results?.map(({ alternatives }: any) => ({
-      transcript: alternatives[0].transcript,
-    }));
-
     const segments = rawResults?.result?.results ?? [];
     const transcript = segments
-      .map((r: any) => r?.alternatives[0]?.transcript ?? "")
+      .map((r:Segment) => r?.alternatives[0]?.transcript ?? "")
       .join("")
       .trim();
 

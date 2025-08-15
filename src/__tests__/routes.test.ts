@@ -10,18 +10,19 @@ jest.mock('../services/speechToText', () => ({
 }));
 
 import speechToText from '../services/speechToText';
-const asMock = <T extends (...a: any)=>any>(fn:any) => fn as jest.Mock<ReturnType<T>, Parameters<T>>;
+
+const stt = jest.mocked(speechToText, { shallow: true });
 
 describe('/listModels', () => {
   it('モデル一覧をnameでソートして返す', async () => {
-    asMock<typeof speechToText.listModels>(speechToText.listModels).mockResolvedValueOnce({
+    stt.listModels.mockResolvedValueOnce({
       result: {
         models: [
           { name: 'zeta', language: 'en' },
           { name: 'alpha', language: 'ja' },
         ],
       }
-    });
+    })
 
     const res = await request(app).get('/api/v1/models').expect(200);
     expect(res.body).toEqual([
@@ -31,7 +32,7 @@ describe('/listModels', () => {
   });
 
   it('SpeechToTextが例外を投げると例外を投げる', async () => {
-    asMock<typeof speechToText.listModels>(speechToText.listModels).mockRejectedValueOnce(new Error('service error'));
+    stt.listModels.mockRejectedValueOnce(new Error('service error'));
     const res = await request(app).get('/api/v1/models').expect(500);
     expect(res.body).toEqual({ message: 'service error' });
   })
@@ -40,7 +41,7 @@ describe('/listModels', () => {
 describe('/recognize', () => {
   beforeEach(() => jest.clearAllMocks());
   it('正常系', async () => {
-    asMock<typeof speechToText.recognize>(speechToText.recognize).mockResolvedValueOnce({
+    stt.recognize.mockResolvedValueOnce({
       result: {
         results: [
           { alternatives: [{ transcript: 'hello' }] },
@@ -93,8 +94,7 @@ describe('/recognize', () => {
   });
 
   test('上流エラー → 500', async () => {
-    asMock<typeof speechToText.recognize>(speechToText.recognize)
-      .mockRejectedValueOnce(new Error('upstream'));
+    stt.recognize.mockRejectedValueOnce(new Error('upstream'))
 
     const res = await request(app)
       .post('/api/v1/recognize')
