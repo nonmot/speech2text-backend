@@ -6,7 +6,7 @@
   "scripts": {
     "build": "npx tsc",
     "start": "npx tsc && node dist/server.js",
-    "dev": "ts-node src/app.ts",
+    "dev": "ts-node src/server.ts",
     "test": "jest"
   },
   "repository": {
@@ -24,7 +24,8 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "ibm-watson": "^11.0.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.19",
