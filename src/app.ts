@@ -1,7 +1,7 @@
 import express from "express";
-import itemRoutes from './routes/routes';
+import itemRoutes from "./routes/routes";
 import { errorHandler } from "./middlewares/errorHandler";
-import cors from 'cors'
+import cors from "cors";
 
 const app = express();
 app.use(express.json());
@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(cors());
 
 // Health check
-app.get('/', (req, res) => {
-  res.status(200).send('OK');
+app.get("/", (req, res) => {
+  res.status(200).send("OK");
 });
 
 // Routes

@@ -6,5 +6,5 @@ export type KeywordHit = {
     before: string;
     match: string;
     after: string;
-  }
-}
+  };
+};

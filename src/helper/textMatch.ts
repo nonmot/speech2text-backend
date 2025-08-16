@@ -7,7 +7,7 @@ function escapeRegExp(s: string): string {
 export function findKeywordMatches(
   text: string,
   keywords: string[],
-  contextLen = 24,
+  contextLen = 24
 ) {
   const hits: KeywordHit[] = [];
   for (const kw of keywords) {
@@ -18,7 +18,7 @@ export function findKeywordMatches(
       const start = m.index;
       const end = start + kw.length;
 
-      const beforeStart = Math.max(0, start - contextLen)
+      const beforeStart = Math.max(0, start - contextLen);
       const afterEnd = Math.min(text.length, end + contextLen);
 
       hits.push({
@@ -29,10 +29,10 @@ export function findKeywordMatches(
           before: text.slice(beforeStart, start),
           match: text.slice(start, end),
           after: text.slice(end, afterEnd),
-        }
+        },
       });
     }
   }
-  hits.sort((a, b) => (a.start - b.start) || (a.end - a.start) - (b.end - b.start));
+  hits.sort((a, b) => a.start - b.start || a.end - a.start - (b.end - b.start));
   return hits;
 }

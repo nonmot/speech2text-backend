@@ -5,11 +5,11 @@ const apiKey: string = process.env.SPEECH2TEXT_API_KEY ?? "";
 const serviceUrl: string = process.env.SPEECH2TEXT_SERVICE_URL ?? "";
 
 const authenticator = new IamAuthenticator({
-  apikey: apiKey
+  apikey: apiKey,
 });
 const speechToText = new SpeechToTextV1({
   authenticator: authenticator,
   serviceUrl: serviceUrl,
-})
+});
 
 export default speechToText;

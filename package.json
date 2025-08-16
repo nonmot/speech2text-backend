@@ -10,7 +10,7 @@
     "test": "jest",
     "lint": "eslint src",
     "format": "prettier src",
-    "format:write": "prettier src"
+    "format:write": "prettier --write src"
   },
   "repository": {
     "type": "git",
