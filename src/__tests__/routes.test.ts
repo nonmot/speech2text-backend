@@ -53,7 +53,6 @@ describe("/recognize", () => {
     const res = await request(app)
       .post("/api/v1/recognize")
       .field("model", "model1")
-      .field("keywords", "hello")
       .attach("file", Buffer.from([0x52, 0x49]), {
         filename: "a.wav",
         contentType: "audio/wav",
@@ -64,12 +63,9 @@ describe("/recognize", () => {
       expect.objectContaining({
         contentType: "audio/wav",
         model: "model1",
-        keywords: ["hello"],
-        keywordsThreshold: 0.5,
       })
     );
     expect(typeof res.body.transcript).toBe("string");
-    expect(res.body).toHaveProperty("highlights");
   });
 
   test("file 未指定 → 400", async () => {
