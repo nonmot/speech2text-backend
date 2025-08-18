@@ -4,11 +4,6 @@ import speechToText from "../services/speechToText";
 import { findKeywordMatches } from "../helper/textMatch";
 import type { KeywordHit } from "../types";
 
-type Payload = {
-  transcript: string;
-  highlights: KeywordHit[];
-};
-
 interface Alternative {
   transcript?: string;
 }
@@ -39,31 +34,12 @@ export const recognizeAudio = async (
         .json({ error: `unsupported content-type: ${file.mimetype}` });
     }
 
-    // const keywords = req.body?.keywords;
-    const keywords: string[] = [];
-    if (Array.isArray(req.body?.keywords)) {
-      req.body?.keywords?.map((kw: string) => keywords.push(kw));
-    } else {
-      if (req.body?.keywords) {
-        keywords.push(req.body?.keywords);
-      }
-    }
-    console.log(`keywords: ${keywords.length}`);
-
     const recognizeParams = {
       audio: file.buffer,
       contentType: file.mimetype,
       model: model,
-      ...(keywords.length > 0
-        ? {
-            keywords: keywords,
-            keywordsThreshold: 0.5,
-          }
-        : {}),
     };
-    console.log(recognizeParams);
 
-    console.log("sending");
     const rawResults = await speechToText.recognize(recognizeParams);
 
     const segments = rawResults?.result?.results ?? [];
@@ -72,10 +48,35 @@ export const recognizeAudio = async (
       .join("")
       .trim();
 
-    const highlights = findKeywordMatches(transcript, keywords);
-    console.log(highlights); // DEBUG
+    const payload = { transcript };
+    res.status(200).json(payload);
+  } catch (error) {
+    next(error);
+  }
+};
 
-    const payload: Payload = { transcript, highlights };
+export const keywordSearch = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const text = req.body.text;
+    if (!text) {
+      return res.status(400).json({ error: "text is required" });
+    }
+    const kwRaw = req.body.keywords;
+    const keywords: string[] = Array.isArray(kwRaw)
+      ? kwRaw
+      : kwRaw
+      ? [kwRaw]
+      : [];
+    if (!keywords || keywords.length === 0) {
+      return res.status(400).json({ error: "keywords is required" });
+    }
+
+    const highlights: KeywordHit[] = findKeywordMatches(text, keywords);
+    const payload = { highlights };
     res.status(200).json(payload);
   } catch (error) {
     next(error);
