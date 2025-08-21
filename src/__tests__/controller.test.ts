@@ -27,9 +27,9 @@ describe("Keyword search", () => {
         start: 118,
         end: 119,
         aroundText: {
-          before: "た もの なの でしょう か 簡単 に 言えば ",
+          before: " 言えば ",
           match: "脳",
-          after: " の 仕組み を モデル に した 技術 です ",
+          after: " の 仕組",
         },
       },
     ];
