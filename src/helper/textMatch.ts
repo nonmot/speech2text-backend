@@ -7,8 +7,8 @@ function escapeRegExp(s: string): string {
 export function findKeywordMatches(
   text: string,
   keywords: string[],
-  contextLen = 24
-) {
+  contextLen = 5
+): KeywordHit[] {
   const hits: KeywordHit[] = [];
   for (const kw of keywords) {
     if (!kw) continue;
