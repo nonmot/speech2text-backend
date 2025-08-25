@@ -8,3 +8,7 @@ describe("GET / for healthcheck", () => {
     expect(res.text).toBe("OK");
   });
 });
+
+describe("Fail test", () => {
+  expect(false).toBe(true);
+})
